@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "emitDeclarationOnly": false,
+    "declaration": true,
     "target": "ES2022",
     "lib": ["ES2023"],
     "module": "ESNext",

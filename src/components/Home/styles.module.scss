@@ -1,0 +1,30 @@
+@import "../../assets/styles/variables";
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f6f6f6;
+
+  .hero {
+    width: 100vw;
+    height: 300px;
+
+    .heroImage {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .productsWrapper {
+    padding: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}

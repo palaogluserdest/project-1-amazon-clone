@@ -1,0 +1,31 @@
+@import "../../assets//styles/variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  background-color: $primaryColor;
+  font-family: $plusJakartaSansBold, sans-serif;
+
+  .navItems {
+    display: flex;
+    gap: 15px;
+    color: #000;
+
+    .navItem {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background-color: #fff;
+      border-radius: 10px;
+      border: none;
+      padding: 5px 10px;
+
+      &:last-child {
+        gap: 15px;
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+@import "../../assets/styles/variables";
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $backgroundColor;
+
+  .ads {
+    margin-top: 20px;
+  }
+
+  .checkout {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    padding: 25px 50px;
+
+    .checkoutTitle {
+      text-align: start;
+      margin-bottom: 40px;
+    }
+
+    .checkoutWrapper {
+      width: 100%;
+      display: flex;
+      gap: 15px;
+
+      .checkoutItems {
+        width: 100%;
+        flex: 5;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .checkoutSummary {
+        height: 200px;
+        padding: 20px;
+        flex: 1px;
+        background-color: #fff;
+        border: none;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .summaryTitle {
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        .summaryItems {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+
+          .summary {
+            font-size: 16px;
+            font-weight: normal;
+          }
+
+          .summaryCheckboxGroup {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+          }
+
+          .summaryButton {
+            width: 240px;
+            border: none;
+            border-radius: 10px;
+            background-color: $primaryColor;
+            color: $textColor;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: auto;
+          }
+        }
+      }
+    }
+  }
+}
