@@ -1,7 +1,14 @@
 import styles from './styles.module.scss';
 import CheckoutProduct from '../CheckoutProduct';
+import { useContext } from 'react';
+import { StateContext } from '../../provider/StateProvider';
 
 const CheckoutComponent = () => {
+  const { stateBasket, itemCountCalculator, priceCalculator } = useContext(StateContext);
+
+  const totalCount = itemCountCalculator();
+  const totalPrice = priceCalculator();
+
   return (
     <>
       <div className={styles.container}>
@@ -16,16 +23,18 @@ const CheckoutComponent = () => {
           <h1 className={styles.checkoutTitle}>Your Shopping Basket</h1>
           <div className={styles.checkoutWrapper}>
             <div className={styles.checkoutItems}>
-              <CheckoutProduct />
-              <CheckoutProduct />
+              {stateBasket.map((basketItem) => (
+                <CheckoutProduct key={basketItem.id} {...basketItem} />
+              ))}
             </div>
             <div className={styles.checkoutSummary}>
               <h2 className={styles.summaryTitle}>Summary</h2>
               <div className={styles.summaryItems}>
                 <span className={styles.summary}>
-                  Subtotal(2 items):{' '}
+                  Subtotal({totalCount} items):{' '}
                   <strong>
-                    <small>$</small>23,92
+                    <small>$</small>
+                    {totalPrice.toFixed(2)}
                   </strong>
                 </span>
                 <div className={styles.summaryCheckboxGroup}>

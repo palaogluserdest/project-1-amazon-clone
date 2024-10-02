@@ -3,17 +3,21 @@ import BasketIcon from '../../assets/icons/basket.svg?react';
 import StoreLogo from '../../assets/icons/store.svg?react';
 import SearchIcon from '../../assets/icons/search.svg?react';
 import HamburgerMenuIcon from '../../assets/icons/hamburger-menu-icon.svg?react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MobilNavBar from '../MobilNavbar';
 import { Link } from 'react-router-dom';
+import { StateContext } from '../../provider/StateProvider';
 
 const Navbar = () => {
   const [windowSize, setWindowSize] = useState<number>(window.innerWidth);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const { itemCountCalculator } = useContext(StateContext);
 
   const handleHamburgerMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+
+  const totalItems = itemCountCalculator();
 
   useEffect(() => {
     const handleResize = () => {
@@ -54,7 +58,7 @@ const Navbar = () => {
               <div className={styles.navItem}>
                 <Link to="/checkout" className={styles.navItemLink}>
                   <BasketIcon className={styles.basketIcon} width={30} height={50} />
-                  <span className={`${styles.downLine} ${styles.basketCount}`}>0</span>
+                  <span className={`${styles.downLine} ${styles.basketCount}`}>{totalItems}</span>
                 </Link>
               </div>
             </>

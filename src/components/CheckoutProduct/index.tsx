@@ -1,27 +1,32 @@
 import ReactStars from 'react-rating-stars-component';
 import styles from './styles.module.scss';
-import { useState } from 'react';
+import { FC, useContext, useState } from 'react';
+import { BasketItemProps } from '../../types/types';
+import { StateContext } from '../../provider/StateProvider';
 
-const CheckoutProduct = () => {
-  const [ratingStars, setRatingStars] = useState<number>(0);
+const CheckoutProduct: FC<BasketItemProps> = ({ id, title, image, price, rating, quantity }) => {
+  const [ratingStars, setRatingStars] = useState<number | undefined>(rating.rate);
+  const { removeFromBasket } = useContext(StateContext);
 
   const handleStarRatingChanged = (newRating: number) => {
     setRatingStars(newRating);
   };
+
+  const handleRemoveFromBasket = () => {
+    removeFromBasket(id);
+  };
+
   return (
     <>
       <div className={styles.checkoutItem}>
         <div className={styles.checkoutItemImg}>
-          <img
-            src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
-            alt=""
-            className={styles.image}
-          />
+          <img src={image} alt={title} className={styles.image} />
         </div>
         <div className={styles.checkoutItemContent}>
-          <h2 className={styles.title}>Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</h2>
+          <h2 className={styles.title}>{title}</h2>
           <span className={styles.price}>
-            <small>$</small>109,95
+            <small>$</small>
+            {price} x ({quantity} items)
           </span>
           <div className={styles.rating}>
             <ReactStars
@@ -32,7 +37,9 @@ const CheckoutProduct = () => {
               activeColor="#ffd700"
             />
           </div>
-          <button className={styles.checkoutButton}>Remove from Basket</button>
+          <button className={styles.checkoutButton} onClick={handleRemoveFromBasket}>
+            Remove from Basket
+          </button>
         </div>
       </div>
     </>

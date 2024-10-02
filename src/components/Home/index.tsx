@@ -1,22 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import Product from '../Product';
 import styles from './styles.module.scss';
-import { ProductsProps } from '../../types/types';
+import { StateContext } from '../../provider/StateProvider';
 
 const HomeComponent = () => {
-  const [products, setProducts] = useState<ProductsProps[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const result = await fetch('https://fakestoreapi.com/products');
-      const data: ProductsProps[] = await result.json();
-
-      setProducts(data);
-    };
-
-    fetchProducts();
-  });
-
+  const { products } = useContext(StateContext);
   return (
     <>
       <div className={styles.container}>
@@ -29,7 +17,7 @@ const HomeComponent = () => {
         </div>
         <div className={styles.productsWrapper}>
           {products.map((product) => (
-            <Product key={product.id} {...product} />
+            <Product key={product.id} product={product} />
           ))}
         </div>
       </div>
