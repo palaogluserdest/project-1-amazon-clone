@@ -34,12 +34,12 @@ const Navbar = () => {
   return (
     <>
       <div className={styles.navbar}>
-        <div className={styles.logo}>
-          <Link to="/">
+        <Link to="/">
+          <div className={styles.logo}>
             <StoreLogo className={styles.logoImg} width={40} height={40} />
-          </Link>
-          <h2 className={styles.logoTitle}>eShop</h2>
-        </div>
+            <h2 className={styles.logoTitle}>eShop</h2>
+          </div>
+        </Link>
         <div className={styles.search}>
           <input className={styles.searchInput} />
           <SearchIcon className={styles.searchIcon} width={30} height={30} />

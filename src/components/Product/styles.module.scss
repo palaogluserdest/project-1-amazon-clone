@@ -1,7 +1,8 @@
 @import "../../assets/styles/variables";
 
 .product {
-  width: 600px;
+  flex: 1 1 400px;
+  // width: 600px;
   min-width: 100px;
   display: flex;
   gap: 20px;
@@ -33,6 +34,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+
 
     .productTitle {
       font-size: 18px;
