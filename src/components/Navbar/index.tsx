@@ -47,14 +47,18 @@ const Navbar = () => {
         <div className={styles.nav}>
           {windowSize > 648 && (
             <>
-              <div className={styles.navItem}>
-                <span className={styles.upLine}>Hello Guest</span>
-                <span className={styles.downLine}>Sign In</span>
-              </div>
-              <div className={styles.navItem}>
-                <span className={styles.upLine}>Your</span>
-                <span className={styles.downLine}>Shop</span>
-              </div>
+              <Link to="/login">
+                <div className={styles.navItem}>
+                  <span className={styles.upLine}>Hello Guest</span>
+                  <span className={styles.downLine}>Sign In</span>
+                </div>
+              </Link>
+              <Link to="/checkout">
+                <div className={styles.navItem}>
+                  <span className={styles.upLine}>Your</span>
+                  <span className={styles.downLine}>Shop</span>
+                </div>
+              </Link>
               <div className={styles.navItem}>
                 <Link to="/checkout" className={styles.navItemLink}>
                   <BasketIcon className={styles.basketIcon} width={30} height={50} />

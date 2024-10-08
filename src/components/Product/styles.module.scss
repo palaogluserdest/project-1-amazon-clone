@@ -46,20 +46,34 @@
       font-weight: normal;
     }
 
-
-    .productButton {
+    .productBtnGroup {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
       margin-top: auto;
-      margin-bottom: 20px;
-      max-width: 150px;
-      padding: 8px 12px;
-      background-color: $primaryColor;
-      color: $textColor;
-      font-size: 14px;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+
+
+      .productDetailButton {
+        @extend .productButton;
+
+        margin: 5px 0;
+      }
+
+
+      .productButton {
+        max-width: 150px;
+        padding: 8px 12px;
+        background-color: $primaryColor;
+        color: $textColor;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
     }
+
+
   }
 
 }

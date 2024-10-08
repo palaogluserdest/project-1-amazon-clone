@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import StoreLogo from '../../assets/icons/store.svg?react';
 import styles from './styles.module.scss';
-import { useState } from 'react';
-import { auth } from '../../firebase.ts';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { FormEvent, useState } from 'react';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebase';
 
 const LoginComponent = () => {
   const navigate = useNavigate();
@@ -11,33 +11,29 @@ const LoginComponent = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const signInUser = (e: SubmitEvent) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      navigate('/');
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        navigate('/');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+      console.log(`Login failed (${errorCode}): ${errorMessage}`);
+    }
   };
 
-  const registerUser = (e: SubmitEvent) => {
+  const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-
-        navigate('/login');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-      });
+      console.log(`Login failed (${errorCode}): ${errorMessage}`);
+    }
   };
 
   return (
@@ -74,14 +70,17 @@ const LoginComponent = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className={styles.loginBtn}>
+        <button type="submit" className={styles.loginBtn} onClick={handleLogin}>
           Sign in
         </button>
         <p className={styles.desc}>
           By signing-in you agree to the eShop Website Condition of Use & Sale. Please see our
           Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice
         </p>
-        <button className={styles.registerBtn}> Create your eShop Account </button>
+        <button className={styles.registerBtn} onClick={handleRegister}>
+          {' '}
+          Create your eShop Account{' '}
+        </button>
       </form>
     </div>
   );

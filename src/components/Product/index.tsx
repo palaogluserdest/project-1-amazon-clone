@@ -39,9 +39,12 @@ const Product: FC<ProductCardProps> = ({ product }) => {
               activeColor="#ffd700"
             />
           </div>
-          <button className={styles.productButton} onClick={handleAddToBasket}>
-            Add to Cart
-          </button>
+          <div className={styles.productBtnGroup}>
+            <button className={styles.productDetailButton}>Go to Detail</button>
+            <button className={styles.productButton} onClick={handleAddToBasket}>
+              Add to Cart
+            </button>
+          </div>
         </div>
       </div>
     </>
