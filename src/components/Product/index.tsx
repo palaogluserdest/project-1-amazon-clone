@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 import { FC, useContext, useState } from 'react';
 import { ProductsProps } from '../../types/types';
 import { StateContext } from '../../provider/StateProvider';
+import { Link } from 'react-router-dom';
 
 type ProductCardProps = {
   product: ProductsProps;
@@ -40,7 +41,13 @@ const Product: FC<ProductCardProps> = ({ product }) => {
             />
           </div>
           <div className={styles.productBtnGroup}>
-            <button className={styles.productDetailButton}>Go to Detail</button>
+            <Link
+              className={styles.productDetailButton}
+              to={`/product/${product.id}`}
+              target="_blank"
+            >
+              Go to Detail
+            </Link>
             <button className={styles.productButton} onClick={handleAddToBasket}>
               Add to Cart
             </button>

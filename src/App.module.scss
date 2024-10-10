@@ -1,0 +1,12 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+
+  .main {
+    min-height: calc(100% - 360px);
+  }
+
+  .footer {
+    margin-top: auto;
+  }
+}
