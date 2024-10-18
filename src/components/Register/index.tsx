@@ -2,20 +2,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import StoreLogo from '../../assets/icons/store.svg?react';
 import styles from './styles.module.scss';
 import { FormEvent, useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebase';
 
-const LoginComponent = () => {
+const RegisterComponent = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
+  const [name, setName] = useState('');
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      navigate('/');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -46,6 +47,18 @@ const LoginComponent = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
+        <div className={styles.emailGroup}>
+          <label htmlFor="nameInput" className={styles.emailLabel}>
+            Name
+          </label>
+          <input
+            value={name}
+            type="text"
+            id="nameInput"
+            className={styles.emailInput}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
         <div className={styles.passwordGroup}>
           <label htmlFor="passwordInput" className={styles.passwordLabel}>
             Password
@@ -58,19 +71,34 @@ const LoginComponent = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className={styles.loginBtn} onClick={handleLogin}>
-          Sign in
-        </button>
+        <div className={styles.passwordGroup}>
+          <label htmlFor="rePasswordInput" className={styles.passwordLabel}>
+            Repeat Password
+          </label>
+          <input
+            value={password}
+            type="password"
+            id="rePasswordInput"
+            className={styles.passwordInput}
+            onChange={(e) => setRePassword(e.target.value)}
+          />
+        </div>
         <p className={styles.desc}>
-          By signing-in you agree to the eShop Website Condition of Use & Sale. Please see our
+          By registering you agree to the eShop Website Condition of Use & Sale. Please see our
           Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice
         </p>
-        <Link className={styles.registerBtn} to="/register">
-          Create your eShop Account
+        <button type="submit" className={styles.loginBtn}>
+          Register
+        </button>
+        <Link
+          to="/login"
+          style={{ textAlign: 'center', marginTop: '5px', textDecoration: 'none', color: '#000' }}
+        >
+          You have an account? Log in
         </Link>
       </form>
     </div>
   );
 };
 
-export default LoginComponent;
+export default RegisterComponent;
