@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export type ProductsProps = {
   id: number;
   title: string;
@@ -14,3 +16,13 @@ export type ProductsProps = {
 export interface BasketItemProps extends ProductsProps {
   quantity?: number;
 }
+
+// # User Types
+
+export type UserProps = {
+  uid: string;
+  email: string;
+  name: string;
+  isAuth: boolean;
+  createdAt: Timestamp;
+};

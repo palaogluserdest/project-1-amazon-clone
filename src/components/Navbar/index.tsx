@@ -7,8 +7,13 @@ import { useContext, useEffect, useState } from 'react';
 import MobilNavBar from '../MobilNavbar';
 import { Link } from 'react-router-dom';
 import { StateContext } from '../../provider/StateProvider';
+import { auth } from '../../../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { getUserFromFS, logOutUser } from '../../utils/user';
+import { UserProps } from '../../types/types';
 
 const Navbar = () => {
+  const [userData, setUserData] = useState<UserProps | null>(null);
   const [windowSize, setWindowSize] = useState<number>(window.innerWidth);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { itemCountCalculator } = useContext(StateContext);
@@ -31,6 +36,21 @@ const Navbar = () => {
     };
   }, [windowSize]);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const fetchUserData = await getUserFromFS(user.uid);
+        if (fetchUserData) {
+          setUserData(fetchUserData);
+        }
+      } else {
+        setUserData(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [userData]);
+
   return (
     <>
       <div className={styles.navbar}>
@@ -47,24 +67,56 @@ const Navbar = () => {
         <div className={styles.nav}>
           {windowSize > 648 && (
             <>
-              <Link to="/login">
-                <div className={styles.navItem}>
-                  <span className={styles.upLine}>Hello Guest</span>
-                  <span className={styles.downLine}>Sign In</span>
-                </div>
-              </Link>
-              <Link to="/checkout">
-                <div className={styles.navItem}>
-                  <span className={styles.upLine}>Your</span>
-                  <span className={styles.downLine}>Shop</span>
-                </div>
-              </Link>
-              <div className={styles.navItem}>
-                <Link to="/checkout" className={styles.navItemLink}>
-                  <BasketIcon className={styles.basketIcon} width={30} height={50} />
-                  <span className={`${styles.downLine} ${styles.basketCount}`}>{totalItems}</span>
+              {!userData?.isAuth && (
+                <Link to="/login">
+                  <div className={styles.navItem}>
+                    <span className={styles.upLine}>Hello Guest</span>
+                    <span className={styles.downLine}>Sign In</span>
+                  </div>
                 </Link>
-              </div>
+              )}
+              {userData?.isAuth && (
+                <div className={styles.navItem}>
+                  <span className={styles.upLine}>Hello</span>
+                  <span className={styles.downLine}>{userData.name}</span>
+                </div>
+              )}
+              {!userData?.isAuth && (
+                <Link
+                  to="/checkout"
+                  style={{
+                    padding: '5px 10px',
+                    backgroundColor: '#ff9f01',
+                    borderRadius: '6px',
+                    color: '#fff',
+                    marginRight: '15px',
+                  }}
+                >
+                  Register
+                </Link>
+              )}
+              {userData?.isAuth && (
+                <button
+                  onClick={() => logOutUser(userData.uid)}
+                  style={{
+                    padding: '5px 10px',
+                    backgroundColor: '#ff9f01',
+                    borderRadius: '6px',
+                    color: '#fff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Log out
+                </button>
+              )}
+              {userData?.isAuth && (
+                <div className={styles.navItem}>
+                  <Link to="/checkout" className={styles.navItemLink}>
+                    <BasketIcon className={styles.basketIcon} width={30} height={50} />
+                    <span className={`${styles.downLine} ${styles.basketCount}`}>{totalItems}</span>
+                  </Link>
+                </div>
+              )}
             </>
           )}
           <div className={styles.hamburgerMenu}>

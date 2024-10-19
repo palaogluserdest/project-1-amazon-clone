@@ -44,11 +44,10 @@ const LoginComponent = () => {
           isAuth: true,
         });
       }
-
+      navigate('/');
       showSuccessAlert('Please wait for home');
 
       setTimeout(() => {
-        navigate('/');
         mySwal.close();
       }, 1500);
     } catch (error: any) {

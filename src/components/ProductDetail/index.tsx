@@ -1,14 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ProductsProps } from '../../types/types';
+import { ProductsProps, UserProps } from '../../types/types';
 import styles from './styles.module.scss';
 import ReactStars from 'react-rating-stars-component';
+import { onAuthStateChanged } from 'firebase/auth';
+import { getUserFromFS } from '../../utils/user';
+import { auth } from '../../../firebase';
 
 type RouteParams = {
   productId: string;
 };
 
 const ProductDetail: FC = () => {
+  const [userData, setUserData] = useState<UserProps | null>(null);
   const { productId } = useParams<RouteParams>();
   const [product, setProduct] = useState<ProductsProps>();
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -35,6 +39,19 @@ const ProductDetail: FC = () => {
     productId && getProductFetcher(productId);
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const fetchUser = await getUserFromFS(user.uid);
+        setUserData(fetchUser);
+      } else {
+        setUserData(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [userData]);
+
   return (
     <>
       {product && (
@@ -60,7 +77,8 @@ const ProductDetail: FC = () => {
               <small>$</small>
               {product.price}
             </span>
-            <button className={styles.addBtn}>Add to Basket</button>
+            {userData?.isAuth && <button className={styles.addBtn}>Add to Basket</button>}
+            {!userData?.isAuth && <p>Ürünü alabilmek için giriş yapın lütfen</p>}
           </div>
         </div>
       )}

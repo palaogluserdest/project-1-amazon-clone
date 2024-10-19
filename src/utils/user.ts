@@ -1,7 +1,9 @@
-import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
+import { UserProps } from '../types/types';
+import { mySwal, showSuccessAlert } from './sweetAlert2';
 
 // * User Auth Create
 
@@ -15,7 +17,7 @@ export const createUserToAuth = async (email: string, password: string) => {
   }
 };
 
-// * User Auth Log in
+// * User Auth Log-in
 
 export const logInUser = async (email: string, password: string) => {
   try {
@@ -27,15 +29,22 @@ export const logInUser = async (email: string, password: string) => {
   }
 };
 
-// * User create to Firestore
+// * User Auth Log-out
 
-type UserProps = {
-  uid: string;
-  email: string;
-  name: string;
-  isAuth: boolean;
-  createdAt: Timestamp;
+export const logOutUser = async (uid: string) => {
+  const userRefDoc = doc(db, 'users', uid);
+  await updateDoc(userRefDoc, { isAuth: false });
+
+  signOut(auth);
+
+  showSuccessAlert('Your Log-out is successfully');
+
+  setTimeout(() => {
+    mySwal.close();
+  }, 1500);
 };
+
+// * User create to Firestore
 
 export const createUserToFS = async (user: UserProps) => {
   try {
@@ -54,7 +63,7 @@ export const getUserFromFS = async (uid: string) => {
     const userRef = await getDoc(userDocRef);
 
     if (userRef.exists()) {
-      return userRef.data();
+      return userRef.data() as UserProps;
     } else {
       return null;
     }

@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 type ProtectedRouteProps = {
   children: ReactNode;
-  isAuth: boolean;
+  isAuth: boolean | undefined;
   redirectTo: string;
 };
 
