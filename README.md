@@ -1,9 +1,9 @@
 ## YAPILACAKLAR LİSTESİ
 
 - [x] : User log-in ve register fonksiyonlarını oluştur. (utily/user.ts)
-- [ ] : User fonksiyonlarının atamasını yap.
-- [ ] : User hata mesajları için sweetAlert 2 kütüphanesi ekle.
-- [ ] : User hata mesajlarının yönetimini ayarla
+- [x] : User fonksiyonlarının atamasını yap.
+- [x] : User hata mesajları için sweetAlert 2 kütüphanesi ekle.
+- [x] : User hata mesajlarının yönetimini ayarla
 - [ ] : Navigasyonda kullanıcıyı ve log out göster
 - [ ] : Giriş yapmamış kullanıcının görmemesi gereken yerleri gizle
 - [ ] : ProtectedRoute yapısı ekle ve sayfa girişlerini koru

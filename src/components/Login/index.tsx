@@ -2,25 +2,60 @@ import { Link, useNavigate } from 'react-router-dom';
 import StoreLogo from '../../assets/icons/store.svg?react';
 import styles from './styles.module.scss';
 import { FormEvent, useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../firebase';
+import { emailChecker, getUserFromFS, handleFirestoreError, logInUser } from '../../utils/user';
+import { mySwal, showErrorAlert, showSuccessAlert } from '../../utils/sweetAlert2';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 const LoginComponent = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // * Error Messages
+  const handleErrorMessage = (eMessage: string) => {
+    setErrorMessage(eMessage);
+
+    showErrorAlert(errorMessage);
+
+    return null;
+  };
+
+  const checkedEmail = emailChecker(email);
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      navigate('/');
-    } catch (error: any) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
 
-      console.log(`Login failed (${errorCode}): ${errorMessage}`);
+    try {
+      if (!checkedEmail) return handleErrorMessage('Invalid email address');
+
+      // * Google Auth Log In
+      const user = await logInUser(email, password);
+
+      // * Get User Information from Google Firestore
+      const fetchedUser = await getUserFromFS(user.uid);
+
+      // * If There is a logged-in user, isAuth will be changed with true
+      if (fetchedUser) {
+        const userRefDoc = doc(db, 'users', fetchedUser.uid);
+        await updateDoc(userRefDoc, {
+          isAuth: true,
+        });
+      }
+
+      showSuccessAlert('Please wait for home');
+
+      setTimeout(() => {
+        navigate('/');
+        mySwal.close();
+      }, 1500);
+    } catch (error: any) {
+      console.log(error.message, error.code);
+
+      setErrorMessage(handleFirestoreError(error));
+      showErrorAlert(errorMessage);
     }
   };
 

@@ -2,8 +2,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import StoreLogo from '../../assets/icons/store.svg?react';
 import styles from './styles.module.scss';
 import { FormEvent, useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../firebase';
+import {
+  createUserToAuth,
+  createUserToFS,
+  emailChecker,
+  handleFirestoreError,
+} from '../../utils/user';
+import { Timestamp } from 'firebase/firestore';
+import { mySwal, showErrorAlert, showSuccessAlert } from '../../utils/sweetAlert2';
 
 const RegisterComponent = () => {
   const navigate = useNavigate();
@@ -12,16 +18,50 @@ const RegisterComponent = () => {
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [name, setName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // * Error Messages
+  const handleErrorMessage = (eMessage: string) => {
+    setErrorMessage(eMessage);
+
+    showErrorAlert(errorMessage);
+
+    return null;
+  };
+
+  // * Checking the email
+  const checkedEmail = emailChecker(email);
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error: any) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
 
-      console.log(`Login failed (${errorCode}): ${errorMessage}`);
+    try {
+      if (!checkedEmail) return handleErrorMessage('Invalid email address');
+      if (password !== rePassword)
+        return handleErrorMessage('Password and Repeat Password must be match');
+
+      const user = await createUserToAuth(email, password);
+
+      const newUser = {
+        uid: user.uid,
+        name: name,
+        email: email,
+        isAuth: false,
+        createdAt: Timestamp.fromDate(new Date()),
+      };
+
+      await createUserToFS(newUser);
+
+      showSuccessAlert('Successfully. Please wait for log-in');
+
+      setTimeout(() => {
+        mySwal.close();
+        navigate('/login');
+      }, 1500);
+    } catch (error: any) {
+      const errorMessage = handleFirestoreError(error);
+      handleErrorMessage(errorMessage);
+      return null;
     }
   };
 
@@ -76,7 +116,7 @@ const RegisterComponent = () => {
             Repeat Password
           </label>
           <input
-            value={password}
+            value={rePassword}
             type="password"
             id="rePasswordInput"
             className={styles.passwordInput}
@@ -87,7 +127,7 @@ const RegisterComponent = () => {
           By registering you agree to the eShop Website Condition of Use & Sale. Please see our
           Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice
         </p>
-        <button type="submit" className={styles.loginBtn}>
+        <button type="submit" className={styles.loginBtn} onClick={handleRegister}>
           Register
         </button>
         <Link
