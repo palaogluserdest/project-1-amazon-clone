@@ -10,6 +10,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { getUserFromFS } from '../utils/user';
 import ProtectedRoute from './ProtectedRoute';
+import NotFound from '../pages/NotFound';
 
 const Root = () => {
   const [userData, setUserData] = useState<UserProps | null>(null);
@@ -56,7 +57,7 @@ const Root = () => {
           }
         />
         <Route path="/product/:productId" element={<ProductDetailPage />} />
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
