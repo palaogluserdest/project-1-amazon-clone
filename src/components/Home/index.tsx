@@ -10,7 +10,7 @@ const HomeComponent = () => {
       <div className={styles.container}>
         <div className={styles.hero}>
           <img
-            src="/src/assets/images/ecommerce-hero-img.jpg"
+            src="/images/ecommerce-hero-img.jpg"
             alt="ecommerce hero image"
             className={styles.heroImage}
           />
