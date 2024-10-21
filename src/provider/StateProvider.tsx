@@ -1,4 +1,4 @@
-import { createContext, FC, useCallback, useEffect, useState } from 'react';
+import { createContext, FC, useEffect, useState } from 'react';
 import { ProductsProps } from '../types/types';
 
 type StateContextProps = {

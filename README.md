@@ -1,10 +1,32 @@
-## YAPILACAKLAR LİSTESİ
+## Project Preview
 
-- [x] : User log-in ve register fonksiyonlarını oluştur. (utily/user.ts)
-- [x] : User fonksiyonlarının atamasını yap.
-- [x] : User hata mesajları için sweetAlert 2 kütüphanesi ekle.
-- [x] : User hata mesajlarının yönetimini ayarla
-- [x] : Navigasyonda kullanıcıyı ve log out göster
-- [ ] : Giriş yapmamış kullanıcının görmemesi gereken yerleri gizle
-- [ ] : ProtectedRoute yapısı ekle ve sayfa girişlerini koru
-- [ ] : Not found 404 sayfası ekle
+## Project Install
+
+- You can use project by cloning to locale
+
+```bash
+git clone https://github.com/palaogluserdest/project-1-amazon-clone
+```
+
+- Install dependencies
+
+```bash
+git install
+```
+
+## Project Libraries
+
+- React.js
+- Typescript
+- React Router Dom
+- Google Authentication
+- Google Firebase
+- React Rating Star
+- Sweet Alert 2
+
+## Project Features
+
+- You can register and log-in with you account
+- You can add products your basket
+- You can see your basket with total balance
+- If you want to add products to you basket you should be log-in
